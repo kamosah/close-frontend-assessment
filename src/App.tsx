@@ -47,6 +47,26 @@ function useDebounce<T>(value: T, delay: number): T {
   return debounced;
 }
 
+const STORAGE_KEY = "pickline_selected_v1";
+
+function usePersistedSelection(): [Set<string>, React.Dispatch<React.SetStateAction<Set<string>>>] {
+  const [selectedItemsKeys, setSelectedItemsKeys] = useState<Set<string>>(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return new Set(JSON.parse(raw) as string[]);
+    } catch {}
+    return new Set();
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(selectedItemsKeys)));
+    } catch {}
+  }, [selectedItemsKeys]);
+
+  return [selectedItemsKeys, setSelectedItemsKeys];
+}
+
 // ─── Context ─────────────────────────────────────────────────────────────────
 
 interface ItemsContextValue {
@@ -67,7 +87,7 @@ const ItemsContext = createContext<ItemsContextValue>({} as ItemsContextValue);
 
 const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [selectedItemsKeys, setSelectedItemsKeys] = useState<Set<string>>(new Set());
+  const [selectedItemsKeys, setSelectedItemsKeys] = usePersistedSelection();
   const [colorFilters, setColorFilters] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 150);
