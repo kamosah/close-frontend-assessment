@@ -368,46 +368,72 @@ const ItemsList = () => {
   } = useItems();
 
   const listRef = useRef(null);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [focusedName, setFocusedName] = useState(null);
+  const focusedIndex = focusedName
+    ? filteredItems.findIndex((item) => item.name === focusedName)
+    : -1;
 
-  const effectiveFocusedIndex =
-    filteredItems.length === 0 ? -1
-    : focusedIndex >= filteredItems.length ? filteredItems.length - 1
-    : focusedIndex;
+  const focusItem = useCallback(
+    (index) => {
+      if (index < 0 || index >= filteredItems.length || !listRef.current) return;
+      const options = listRef.current.querySelectorAll('[role="option"]');
+      const el = options[index];
+      if (!el) return;
 
-  useEffect(() => {
-    if (effectiveFocusedIndex < 0 || !listRef.current) return;
-    const options = listRef.current.querySelectorAll('[role="option"]');
-    if (options[effectiveFocusedIndex]) options[effectiveFocusedIndex].focus();
-  }, [effectiveFocusedIndex]);
+      el.focus({ preventScroll: true });
+      setFocusedName(filteredItems[index].name);
+
+      const rect = el.getBoundingClientRect();
+      const toolbarEl = listRef.current.previousElementSibling;
+      const toolbarBottom = toolbarEl ? toolbarEl.getBoundingClientRect().bottom : 0;
+
+      if (rect.bottom > window.innerHeight) {
+        el.scrollIntoView({ block: "end", behavior: "instant" });
+      } else if (rect.top < toolbarBottom) {
+        el.scrollIntoView({ block: "start", behavior: "instant" });
+        const nudge = toolbarBottom - el.getBoundingClientRect().top;
+        if (nudge > 0) {
+          const parent = listRef.current.parentElement;
+          const oy = parent ? getComputedStyle(parent).overflowY : "";
+          if (oy === "auto" || oy === "scroll") {
+            parent.scrollBy({ top: -nudge - 8, behavior: "instant" });
+          } else {
+            window.scrollBy({ top: -nudge - 8, behavior: "instant" });
+          }
+        }
+      }
+    },
+    [filteredItems],
+  );
 
   const onKeyDown = (e) => {
     const len = filteredItems.length;
     if (len === 0) return;
+    const cur = focusedIndex;
     switch (e.key) {
       case "ArrowDown":
       case "ArrowRight":
         e.preventDefault();
-        setFocusedIndex((prev) => (prev < len - 1 ? prev + 1 : 0));
+        focusItem(cur < len - 1 ? cur + 1 : 0);
         break;
       case "ArrowUp":
       case "ArrowLeft":
         e.preventDefault();
-        setFocusedIndex((prev) => (prev > 0 ? prev - 1 : len - 1));
+        focusItem(cur > 0 ? cur - 1 : len - 1);
         break;
       case "Home":
         e.preventDefault();
-        setFocusedIndex(0);
+        focusItem(0);
         break;
       case "End":
         e.preventDefault();
-        setFocusedIndex(len - 1);
+        focusItem(len - 1);
         break;
       case " ":
       case "Enter":
         e.preventDefault();
-        if (effectiveFocusedIndex >= 0)
-          onToggleItemSelected(filteredItems[effectiveFocusedIndex].name);
+        if (focusedIndex >= 0)
+          onToggleItemSelected(filteredItems[focusedIndex].name);
         break;
       case "/":
         e.preventDefault();
@@ -415,7 +441,7 @@ const ItemsList = () => {
         break;
       case "Escape":
         e.preventDefault();
-        setFocusedIndex(-1);
+        setFocusedName(null);
         e.currentTarget.blur();
         break;
     }
@@ -440,20 +466,20 @@ const ItemsList = () => {
       ref={listRef}
       className="ItemsList"
       role="listbox"
-      tabIndex={effectiveFocusedIndex >= 0 ? -1 : 0}
+      tabIndex={focusedIndex >= 0 ? -1 : 0}
       aria-multiselectable="true"
       aria-label="Available items"
       onKeyDown={onKeyDown}
       onFocus={(e) => {
         if (e.target === e.currentTarget && filteredItems.length > 0) {
-          setFocusedIndex(0);
+          focusItem(0);
         }
       }}
     >
       {filteredItems.map((item, index) => (
         <ColorItem
           key={item.name}
-          isFocused={effectiveFocusedIndex === index}
+          isFocused={focusedIndex === index}
           isSelected={selectedItemsKeys.has(item.name)}
           item={item}
           onToggle={onToggleItemSelected}

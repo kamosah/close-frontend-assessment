@@ -522,28 +522,32 @@ body {
   position: relative;
 }
 
-/* CSS magnifier icon */
+/* CSS magnifier — entire composition (lens + handle) fits ~26x26,
+   centered in the 52px circle: offset = (52-26)/2 = 13px */
 .NoResults__Icon::before {
   content: "";
   position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 18px;
-  height: 18px;
+  top: 11px;
+  left: 11px;
+  width: 20px;
+  height: 20px;
   border: 2px solid var(--text-secondary);
   border-radius: 50%;
 }
 
+/* Handle starts 1px inside the lens edge (SE contact point ≈ 28,28)
+   so the two shapes visually join */
 .NoResults__Icon::after {
   content: "";
   position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 9px;
-  height: 2px;
+  top: 28px;
+  left: 28px;
+  width: 13px;
+  height: 2.5px;
   background: var(--text-secondary);
+  border-radius: 1px;
   transform: rotate(45deg);
-  transform-origin: left center;
+  transform-origin: 0 50%;
 }
 
 .NoResults__Title {
@@ -631,7 +635,8 @@ body {
   background: var(--brand-green-light);
 }
 
-.ColorItem--focused {
+/* Ring driven by real browser focus, not React state — disappears on click-away */
+.ColorItem:focus-visible {
   box-shadow: 0 0 0 2px var(--brand-green);
 }
 
