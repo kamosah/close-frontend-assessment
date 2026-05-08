@@ -221,8 +221,22 @@ const EmptySelection = () => (
 );
 
 const SideRail = () => {
-  const { selectedItems, onToggleItemSelected } = useItems();
+  const { selectedItems, onToggleItemSelected, onClearAll } = useItems();
+  const [confirmClear, setConfirmClear] = useState(false);
   const count = selectedItems.length;
+
+  const handleClearClick = () => {
+    if (confirmClear) {
+      onClearAll();
+      setConfirmClear(false);
+    } else {
+      setConfirmClear(true);
+    }
+  };
+
+  useEffect(() => {
+    if (count === 0) setConfirmClear(false);
+  }, [count]);
 
   return (
     <aside className="SideRail" aria-label="Selected items">
@@ -237,6 +251,16 @@ const SideRail = () => {
               {count}
             </span>
           </div>
+          {count > 0 && (
+            <button
+              className={`SideRail__ClearAll${confirmClear ? " SideRail__ClearAll--confirm" : ""}`}
+              onClick={handleClearClick}
+              onBlur={() => setConfirmClear(false)}
+              aria-label={confirmClear ? "Confirm clear all" : "Clear all selected items"}
+            >
+              {confirmClear ? "Are you sure?" : "Clear all"}
+            </button>
+          )}
         </div>
         <p className="caption">
           {count === 0
