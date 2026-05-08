@@ -57,7 +57,7 @@ function usePersistedSelection() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) return new Set(JSON.parse(raw));
-    } catch {
+    } catch (_e) {
       // localStorage unavailable
     }
     return new Set();
@@ -66,7 +66,7 @@ function usePersistedSelection() {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(selectedItemsKeys)));
-    } catch {
+    } catch (_e) {
       // localStorage unavailable
     }
   }, [selectedItemsKeys]);
