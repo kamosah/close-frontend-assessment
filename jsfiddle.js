@@ -378,7 +378,7 @@ const ItemsList = () => {
   useEffect(() => {
     if (effectiveFocusedIndex < 0 || !listRef.current) return;
     const options = listRef.current.querySelectorAll('[role="option"]');
-    options[effectiveFocusedIndex]?.focus();
+    if (options[effectiveFocusedIndex]) options[effectiveFocusedIndex].focus();
   }, [effectiveFocusedIndex]);
 
   const onKeyDown = (e) => {
@@ -411,7 +411,7 @@ const ItemsList = () => {
         break;
       case "/":
         e.preventDefault();
-        searchInputRef.current?.focus();
+        if (searchInputRef.current) searchInputRef.current.focus();
         break;
       case "Escape":
         e.preventDefault();
@@ -424,7 +424,7 @@ const ItemsList = () => {
   const handleClearSearch = useCallback(() => {
     onSearchQueryChange("");
     colorFilters.forEach((c) => onToggleColorFilter(c));
-    searchInputRef.current?.focus();
+    if (searchInputRef.current) searchInputRef.current.focus();
   }, [onSearchQueryChange, colorFilters, onToggleColorFilter]);
 
   if (filteredItems.length === 0) {
