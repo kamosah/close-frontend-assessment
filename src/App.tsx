@@ -21,19 +21,40 @@ interface Item {
 
 const SIZES = ["tiny", "small", "medium", "large", "huge"];
 export const COLORS = [
-  "navy", "blue", "aqua", "teal", "olive", "green", "lime",
-  "yellow", "orange", "red", "maroon", "fuchsia", "purple",
-  "silver", "gray", "black",
+  "navy",
+  "blue",
+  "aqua",
+  "teal",
+  "olive",
+  "green",
+  "lime",
+  "yellow",
+  "orange",
+  "red",
+  "maroon",
+  "fuchsia",
+  "purple",
+  "silver",
+  "gray",
+  "black",
 ];
 const FRUITS = [
-  "apple", "banana", "watermelon", "orange", "peach", "tangerine",
-  "pear", "kiwi", "mango", "pineapple",
+  "apple",
+  "banana",
+  "watermelon",
+  "orange",
+  "peach",
+  "tangerine",
+  "pear",
+  "kiwi",
+  "mango",
+  "pineapple",
 ];
 
 const ITEMS: Item[] = SIZES.flatMap((size) =>
   FRUITS.flatMap((fruit) =>
-    COLORS.map((color) => ({ name: `${size} ${color} ${fruit}`, color }))
-  )
+    COLORS.map((color) => ({ name: `${size} ${color} ${fruit}`, color })),
+  ),
 );
 
 // ─── Hooks ───────────────────────────────────────────────────────────────────
@@ -49,18 +70,26 @@ function useDebounce<T>(value: T, delay: number): T {
 
 const STORAGE_KEY = "pickline_selected_v1";
 
-function usePersistedSelection(): [Set<string>, React.Dispatch<React.SetStateAction<Set<string>>>] {
-  const [selectedItemsKeys, setSelectedItemsKeys] = useState<Set<string>>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return new Set(JSON.parse(raw) as string[]);
-    } catch {}
-    return new Set();
-  });
+function usePersistedSelection(): [
+  Set<string>,
+  React.Dispatch<React.SetStateAction<Set<string>>>,
+] {
+  const [selectedItemsKeys, setSelectedItemsKeys] = useState<Set<string>>(
+    () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return new Set(JSON.parse(raw) as string[]);
+      } catch {}
+      return new Set();
+    },
+  );
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(selectedItemsKeys)));
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(Array.from(selectedItemsKeys)),
+      );
     } catch {}
   }, [selectedItemsKeys]);
 
@@ -116,7 +145,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
 
   const selectedItems = useMemo(
     () => ITEMS.filter((item) => selectedItemsKeys.has(item.name)),
-    [selectedItemsKeys]
+    [selectedItemsKeys],
   );
 
   const filteredItems = useMemo(() => {
@@ -124,7 +153,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
     return ITEMS.filter(
       (item) =>
         item.name.includes(q) &&
-        (colorFilters.size === 0 || colorFilters.has(item.color))
+        (colorFilters.size === 0 || colorFilters.has(item.color)),
     );
   }, [debouncedSearchQuery, colorFilters]);
 
@@ -153,10 +182,12 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       searchQuery,
       selectedItems,
       selectedItemsKeys,
-    ]
+    ],
   );
 
-  return <ItemsContext.Provider value={value}>{children}</ItemsContext.Provider>;
+  return (
+    <ItemsContext.Provider value={value}>{children}</ItemsContext.Provider>
+  );
 };
 
 const useItems = () => useContext(ItemsContext);
@@ -188,7 +219,11 @@ interface SideRailItemProps {
 
 const SideRailItem = memo(({ item, onRemove }: SideRailItemProps) => (
   <li className="SideRail__item" onClick={() => onRemove(item.name)}>
-    <span className="SideRail__item__Color" data-color={item.color} aria-hidden="true" />
+    <span
+      className="SideRail__item__Color"
+      data-color={item.color}
+      aria-hidden="true"
+    />
     <span className="SideRail__item__Name">{item.name}</span>
     <button
       className="SideRail__item__IconButton"
@@ -208,7 +243,7 @@ const EmptySelection = () => (
     <div className="SideRail__Empty__Icon" aria-hidden="true" />
     <p className="SideRail__Empty__Title">Nothing selected yet</p>
     <p className="SideRail__Empty__Subtitle">
-      Tap any item on the right to add it here. Your selection is saved between sessions.
+      Tap any item to add it here. Your selection is saved between sessions.
     </p>
   </div>
 );
@@ -236,7 +271,9 @@ const SideRail = () => {
       <div className="SideRail__Header">
         <div className="SideRail__Header__Row">
           <div className="SideRail__SelectedCount__Container">
-            <span className="SideRail__SelectedCount__prefix">Your selection</span>
+            <span className="SideRail__SelectedCount__prefix">
+              Your selection
+            </span>
             <span
               className={`SideRail__SelectedCount__badge${count === 0 ? " SideRail__SelectedCount__badge--empty" : ""}`}
               aria-label={`${count} items selected`}
@@ -249,7 +286,9 @@ const SideRail = () => {
               className={`SideRail__ClearAll${confirmClear ? " SideRail__ClearAll--confirm" : ""}`}
               onClick={handleClearClick}
               onBlur={() => setConfirmClear(false)}
-              aria-label={confirmClear ? "Confirm clear all" : "Clear all selected items"}
+              aria-label={
+                confirmClear ? "Confirm clear all" : "Clear all selected items"
+              }
             >
               {confirmClear ? "Are you sure?" : "Clear all"}
             </button>
@@ -294,7 +333,11 @@ const ColorBadge = memo(({ color, isSelected, onClick }: ColorBadgeProps) => (
     aria-pressed={isSelected}
     onClick={() => onClick(color)}
   >
-    <span className="ColorBadge__Circle" data-color={color} aria-hidden="true" />
+    <span
+      className="ColorBadge__Circle"
+      data-color={color}
+      aria-hidden="true"
+    />
     {color[0].toUpperCase() + color.slice(1)}
   </button>
 ));
@@ -330,7 +373,9 @@ const Toolbar = () => {
         </span>
       </div>
       <div className="Toolbar__Filters_Panel">
-        <span className="Toolbar__Filter__Label" aria-hidden="true">COLOR</span>
+        <span className="Toolbar__Filter__Label" aria-hidden="true">
+          COLOR
+        </span>
         <div
           className="Toolbar__Filter_Options"
           role="group"
@@ -359,37 +404,37 @@ interface ColorItemProps {
   onToggle: (name: string) => void;
 }
 
-const ColorItem = memo(({ isFocused, isSelected, item, onToggle }: ColorItemProps) => {
-  const [size, , fruit] = item.name.split(" ");
-  return (
-    <div
-      tabIndex={isFocused ? 0 : -1}
-      className={`ColorItem${isSelected ? " ColorItem--selected" : ""}${isFocused ? " ColorItem--focused" : ""}`}
-      role="option"
-      aria-selected={isSelected}
-      aria-label={item.name}
-      onClick={() => onToggle(item.name)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onToggle(item.name);
-        }
-      }}
-    >
-      <div className="ColorItem__Content">
-        <span className="ColorItem__Color" data-color={item.color} aria-hidden="true" />
-        <div className="ColorItem__Info">
-          <span className="ColorItem__Size">{size.toUpperCase()}</span>
-          <span className="ColorItem__Name">
-            {item.color[0].toUpperCase() + item.color.slice(1)}{" "}
-            {fruit[0].toUpperCase() + fruit.slice(1)}
-          </span>
+const ColorItem = memo(
+  ({ isFocused, isSelected, item, onToggle }: ColorItemProps) => {
+    const [size, , fruit] = item.name.split(" ");
+    return (
+      <div
+        tabIndex={isFocused ? 0 : -1}
+        className={`ColorItem${isSelected ? " ColorItem--selected" : ""}${isFocused ? " ColorItem--focused" : ""}`}
+        role="option"
+        aria-selected={isSelected}
+        aria-label={item.name}
+        onClick={() => onToggle(item.name)}
+      >
+        <div className="ColorItem__Content">
+          <span
+            className="ColorItem__Color"
+            data-color={item.color}
+            aria-hidden="true"
+          />
+          <div className="ColorItem__Info">
+            <span className="ColorItem__Size">{size.toUpperCase()}</span>
+            <span className="ColorItem__Name">
+              {item.color[0].toUpperCase() + item.color.slice(1)}{" "}
+              {fruit[0].toUpperCase() + fruit.slice(1)}
+            </span>
+          </div>
         </div>
+        <CheckboxIcon isChecked={isSelected} />
       </div>
-      <CheckboxIcon isChecked={isSelected} />
-    </div>
-  );
-});
+    );
+  },
+);
 
 // ─── ItemsList ───────────────────────────────────────────────────────────────
 
@@ -397,7 +442,9 @@ const NoResults = ({ onClearSearch }: { onClearSearch: () => void }) => (
   <div className="NoResults" role="status" aria-live="polite">
     <div className="NoResults__Icon" aria-hidden="true" />
     <p className="NoResults__Title">No matches</p>
-    <p className="NoResults__Subtitle">Try a different search or adjust the color filter.</p>
+    <p className="NoResults__Subtitle">
+      Try a different search or adjust the color filter.
+    </p>
     <button className="NoResults__ClearButton" onClick={onClearSearch}>
       Clear search
     </button>
@@ -427,7 +474,8 @@ const ItemsList = () => {
 
   useEffect(() => {
     if (focusedIndex < 0 || !listRef.current) return;
-    const options = listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
+    const options =
+      listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
     options[focusedIndex]?.focus();
   }, [focusedIndex]);
 
@@ -457,7 +505,8 @@ const ItemsList = () => {
       case " ":
       case "Enter":
         e.preventDefault();
-        if (focusedIndex >= 0) onToggleItemSelected(filteredItems[focusedIndex].name);
+        if (focusedIndex >= 0)
+          onToggleItemSelected(filteredItems[focusedIndex].name);
         break;
       case "/":
         e.preventDefault();
@@ -490,9 +539,16 @@ const ItemsList = () => {
       ref={listRef}
       className="ItemsList"
       role="listbox"
+      tabIndex={focusedIndex >= 0 ? -1 : 0}
       aria-multiselectable="true"
       aria-label="Available items"
       onKeyDown={onKeyDown}
+      onFocus={(e) => {
+        // Seed focus to first item when Tab lands on the container itself
+        if (e.target === e.currentTarget && filteredItems.length > 0) {
+          setFocusedIndex(0);
+        }
+      }}
     >
       {filteredItems.map((item, index) => (
         <ColorItem
