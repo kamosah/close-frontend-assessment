@@ -20,7 +20,7 @@ interface Item {
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const SIZES = ["tiny", "small", "medium", "large", "huge"];
-export const COLORS = [
+const COLORS = [
   "navy",
   "blue",
   "aqua",
@@ -79,7 +79,9 @@ function usePersistedSelection(): [
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) return new Set(JSON.parse(raw) as string[]);
-      } catch {}
+      } catch {
+        // localStorage unavailable (e.g. private browsing restrictions)
+      }
       return new Set();
     },
   );
@@ -90,7 +92,9 @@ function usePersistedSelection(): [
         STORAGE_KEY,
         JSON.stringify(Array.from(selectedItemsKeys)),
       );
-    } catch {}
+    } catch {
+      // localStorage unavailable
+    }
   }, [selectedItemsKeys]);
 
   return [selectedItemsKeys, setSelectedItemsKeys];
@@ -130,9 +134,9 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       else next.add(key);
       return next;
     });
-  }, []);
+  }, [setSelectedItemsKeys]);
 
-  const onClearAll = useCallback(() => setSelectedItemsKeys(new Set()), []);
+  const onClearAll = useCallback(() => setSelectedItemsKeys(new Set()), [setSelectedItemsKeys]);
 
   const onToggleColorFilter = useCallback((color: string) => {
     setColorFilters((prev) => {
@@ -253,6 +257,9 @@ const SideRail = () => {
   const [confirmClear, setConfirmClear] = useState(false);
   const count = selectedItems.length;
 
+  // Reset during render when selection empties (e.g. items removed one by one)
+  if (confirmClear && count === 0) setConfirmClear(false);
+
   const handleClearClick = () => {
     if (confirmClear) {
       onClearAll();
@@ -261,10 +268,6 @@ const SideRail = () => {
       setConfirmClear(true);
     }
   };
-
-  useEffect(() => {
-    if (count === 0) setConfirmClear(false);
-  }, [count]);
 
   return (
     <aside className="SideRail" aria-label="Selected items">
@@ -465,19 +468,18 @@ const ItemsList = () => {
   const listRef = useRef<HTMLDivElement>(null);
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
-  useEffect(() => {
-    setFocusedIndex((prev) => {
-      if (filteredItems.length === 0) return -1;
-      return prev >= filteredItems.length ? filteredItems.length - 1 : prev;
-    });
-  }, [filteredItems.length]);
+  // Clamp derived value during render — no effect needed
+  const effectiveFocusedIndex =
+    filteredItems.length === 0 ? -1
+    : focusedIndex >= filteredItems.length ? filteredItems.length - 1
+    : focusedIndex;
 
   useEffect(() => {
-    if (focusedIndex < 0 || !listRef.current) return;
+    if (effectiveFocusedIndex < 0 || !listRef.current) return;
     const options =
       listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
-    options[focusedIndex]?.focus();
-  }, [focusedIndex]);
+    options[effectiveFocusedIndex]?.focus();
+  }, [effectiveFocusedIndex]);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const len = filteredItems.length;
@@ -505,8 +507,8 @@ const ItemsList = () => {
       case " ":
       case "Enter":
         e.preventDefault();
-        if (focusedIndex >= 0)
-          onToggleItemSelected(filteredItems[focusedIndex].name);
+        if (effectiveFocusedIndex >= 0)
+          onToggleItemSelected(filteredItems[effectiveFocusedIndex].name);
         break;
       case "/":
         e.preventDefault();
@@ -539,7 +541,7 @@ const ItemsList = () => {
       ref={listRef}
       className="ItemsList"
       role="listbox"
-      tabIndex={focusedIndex >= 0 ? -1 : 0}
+      tabIndex={effectiveFocusedIndex >= 0 ? -1 : 0}
       aria-multiselectable="true"
       aria-label="Available items"
       onKeyDown={onKeyDown}
@@ -553,7 +555,7 @@ const ItemsList = () => {
       {filteredItems.map((item, index) => (
         <ColorItem
           key={item.name}
-          isFocused={focusedIndex === index}
+          isFocused={effectiveFocusedIndex === index}
           isSelected={selectedItemsKeys.has(item.name)}
           item={item}
           onToggle={onToggleItemSelected}
