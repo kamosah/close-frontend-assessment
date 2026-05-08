@@ -24,20 +24,20 @@ const {
 
 const STORAGE_KEY = "pickline_selected_v1";
 
-const SIZES  = ["tiny", "small", "medium", "large", "huge"];
-const COLORS = [
+const sizes  = ["tiny", "small", "medium", "large", "huge"];
+const colors = [
   "navy", "blue", "aqua", "teal", "olive", "green", "lime",
   "yellow", "orange", "red", "maroon", "fuchsia", "purple",
   "silver", "gray", "black",
 ];
-const FRUITS = [
+const fruits = [
   "apple", "banana", "watermelon", "orange", "peach", "tangerine",
   "pear", "kiwi", "mango", "pineapple",
 ];
 
-const ITEMS = SIZES.flatMap((size) =>
-  FRUITS.flatMap((fruit) =>
-    COLORS.map((color) => ({ name: `${size} ${color} ${fruit}`, color }))
+const items = sizes.flatMap((size) =>
+  fruits.flatMap((fruit) =>
+    colors.map((color) => ({ name: `${size} ${color} ${fruit}`, color }))
   )
 );
 
@@ -111,13 +111,13 @@ const ItemsProvider = ({ children }) => {
   }, []);
 
   const selectedItems = useMemo(
-    () => ITEMS.filter((item) => selectedItemsKeys.has(item.name)),
+    () => items.filter((item) => selectedItemsKeys.has(item.name)),
     [selectedItemsKeys]
   );
 
   const filteredItems = useMemo(() => {
     const q = debouncedSearchQuery.toLowerCase();
-    return ITEMS.filter(
+    return items.filter(
       (item) =>
         item.name.includes(q) &&
         (colorFilters.size === 0 || colorFilters.has(item.color))
@@ -289,19 +289,19 @@ const Toolbar = () => {
           ref={searchInputRef}
           className="Toolbar__Search_Input"
           type="search"
-          placeholder={`Search ${ITEMS.length} items...`}
+          placeholder={`Search ${items.length} items...`}
           value={searchQuery}
           onChange={(e) => onSearchQueryChange(e.target.value)}
           aria-label="Search items"
         />
         <span className="Toolbar__FiltersLabel" aria-live="polite" aria-atomic="true">
-          Showing <b>{filteredItems.length}</b> of {ITEMS.length}
+          Showing <b>{filteredItems.length}</b> of {items.length}
         </span>
       </div>
       <div className="Toolbar__Filters_Panel">
         <span className="Toolbar__Filter__Label" aria-hidden="true">COLOR</span>
         <div className="Toolbar__Filter_Options" role="group" aria-label="Filter by color">
-          {COLORS.map((color) => (
+          {colors.map((color) => (
             <ColorBadge
               key={color}
               color={color}
