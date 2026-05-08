@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# Pickline — Close Senior Frontend Engineer Assessment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A performant item-picker built with React 19 + TypeScript + Vite.
 
-Currently, two official plugins are available:
+**Live demo:** https://close-frontend-assessment.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Search** — debounced (150 ms) full-text search across 800 items
+- **Color filter** — multi-select color badge filters, combinable with search
+- **Selection rail** — sidebar that persists your selection to `localStorage` across sessions
+- **Clear all** — two-step confirmation before wiping the selection
+- **Keyboard navigation** — full roving tabindex on the item grid (Arrow keys, Home/End, Space/Enter, `/` to jump to search, Escape to exit)
+- **Accessible** — `listbox`/`option` ARIA roles, `aria-multiselectable`, `aria-live` result count, `:focus-visible` ring
+- **Responsive** — stacked single-column on mobile (side rail collapses when empty), 2–4 column grid on desktop
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19, TypeScript, Vite
+- No UI library — all components and icons are hand-rolled CSS
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Local development
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## JSFiddle submission
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+`jsfiddle.js` is a self-contained Babel + JSX version of the same app for the original challenge submission:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **HTML panel** — load React 18 UMD scripts + `<div id="root">`
+- **CSS panel** — paste `src/App.css`
+- **JavaScript panel** — paste `jsfiddle.js`, preprocessor set to **Babel + JSX**
