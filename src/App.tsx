@@ -270,7 +270,7 @@ const SideRail = () => {
   };
 
   return (
-    <aside className="SideRail" aria-label="Selected items">
+    <aside className="SideRail" aria-label="Selected items" data-has-items={count > 0}>
       <div className="SideRail__Header">
         <div className="SideRail__Header__Row">
           <div className="SideRail__SelectedCount__Container">

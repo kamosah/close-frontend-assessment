@@ -229,6 +229,13 @@ body {
   overflow-y: auto;
 }
 
+/* On mobile: collapse to just the header when nothing is selected */
+@media (max-width: 767px) {
+  .SideRail[data-has-items="false"] .SideRail__Body {
+    display: none;
+  }
+}
+
 .SideRail__List {
   list-style: none;
   padding: var(--space-2);
@@ -291,12 +298,6 @@ body {
 
 /* ─── Empty selection state ─────────────────────────────────────────────── */
 
-/* On mobile the sticky header badge is enough — hide the illustration */
-@media (max-width: 767px) {
-  .SideRail__Empty {
-    display: none;
-  }
-}
 
 .SideRail__Empty {
   display: flex;
