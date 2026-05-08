@@ -1,0 +1,481 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.List {
+  margin: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: 60px;
+  grid-gap: 16px;
+}
+h2 {
+  text-align: center;;
+}
+.Selected__List {
+  margin: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: 60px;
+  grid-gap: 16px;
+}
+
+.List__item {
+  line-height: 60px;
+  text-align: center;
+  color: white;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+.List__item.selected {
+  outline: 2px solid blue;
+  outline-offset: 2px;
+}
+
+/* Taken from https://clrs.cc/ */
+
+
+:root {
+  /* Colors */
+  --navy: #001f3f;
+  --blue: #0074d9;
+  --aqua: #7fdbff;
+  --teal: #39cccc;
+  --olive: #3d9970;
+  --green: #2ecc40;
+  --lime: #01ff70;
+  --yellow: #ffdc00;
+  --orange: #ff851b;
+  --red: #ff4136;
+  --maroon: #85144b;
+  --fuchsia: #f012be;
+  --purple: #b10dc9;
+  --black: #111111;
+  --gray: #aaaaaa;
+  --silver: #dddddd;
+  /* Sizes */
+  --spacing: 16px;
+  --border-radius: 4px;
+}
+
+/* Custom Styles */
+
+.Container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "siderail"
+    "main";
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* prevent body scroll */
+}
+
+.SideRail {
+  grid-area: siderail;
+  height: 100vh;
+  border-right: 1px solid var(--gray);
+  overflow-y: auto;
+}
+.SideRail__Header {
+  background: #fff;
+  border-top: 1px solid var(--gray);
+  border-bottom: 1px solid var(--gray);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.SideRail__SelectedCount__Container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-y: auto;
+}
+.SideRail__SelectedCount__prefix {
+  font-size: 14px;
+  font-weight: bold;
+}
+.SideRail__SelectedCount__badge {
+    display: inline-flex;
+    align-items: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: #ECF5F1;
+    color: #2E7E5C;
+    font-size: 12px;
+    font-weight: 500;
+}
+.SideRail__SelectedCount__badge--empty {
+  background:#F5F5F4;
+  color: #A8A29E;
+}
+.SideRail__Header .caption {
+  color: var(--gray);
+  font-size: 12px;
+}
+.SideRail__Title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.SideRail__Description {
+  font-size: 0.875rem;
+  color: var(--gray);
+}
+.SideRail__List {
+  list-style: none;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+.SideRail__item {
+  padding: 12px;
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.SideRail__item:hover {
+  background: #f5f5f4;
+}
+.SideRail__item__Color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.SideRail__item__IconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  right: 8px;
+  display: none;
+  border-radius: var(--border-radius);
+}
+.SideRail__item:hover .SideRail__item__IconButton {
+  display: inline-block;
+}
+.CloseIcon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+}
+.CloseIcon__Line {
+  position: absolute;
+  width: 2px;
+  height: 12px;
+  background-color: var(--gray);
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.CloseIcon__Line--1 {
+  transform: translateX(-50%) rotate(45deg);
+}
+.CloseIcon__Line--2 {
+  transform: translateX(-50%) rotate(-45deg);
+}
+
+.Main {
+  grid-area: main;
+  background-color: #FAFAF9;
+  border-top: 1px solid var(--gray);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "toolbar"
+    "items-list";
+  min-height: 0;        /* allow grid item to shrink below content size */
+  overflow-y: auto;     /* Main is now the scroll container */
+}
+.Toolbar {
+  padding: 1rem;
+  grid-area: toolbar;
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  background-color: #FAFAF9;
+  top: 0;
+  z-index: 1;
+}
+.Toolbar__Search {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.Toolbar__Search_Input {
+  padding: 0.5rem;
+  width: 100%;
+  flex: 1;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--gray);
+}
+.Toolbar__Filters_Panel {
+  padding-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+.Toolbar__Filter__Label {
+  display: inline-block;
+  color: var(--gray);
+}
+.Toolbar__Search_Panel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.Toolbar__Search__Input {
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--gray);
+  flex: 1;
+}
+.Toolbar__FiltersLabel {
+  flex: 0 0 auto;
+}
+.Toolbar__Filter_Options {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.ColorBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0 10px;
+  height: 26px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid var(--gray);
+  background: #fff;
+  font-size: 12px;
+}
+.ColorBadge__Circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.ColorBadge--selected {
+  border-color: #2f8659;
+  background: #e6f4ea;
+}
+[data-color="navy"] { 
+  background-color: var(--navy);
+}
+[data-color="blue"] { 
+  background-color: var(--blue);
+}
+[data-color="aqua"] { 
+  background-color: var(--aqua);
+}
+[data-color="teal"] { 
+  background-color: var(--teal);
+}
+[data-color="olive"] { 
+  background-color: var(--olive);
+}
+[data-color="green"] { 
+  background-color: var(--green);
+}
+[data-color="lime"] { 
+  background-color: var(--lime);
+}
+[data-color="yellow"] { 
+  background-color: var(--yellow);
+}
+[data-color="orange"] { 
+  background-color: var(--orange);
+}
+[data-color="red"] { 
+  background-color: var(--red);
+}
+[data-color="maroon"] { 
+  background-color: var(--maroon);
+}
+[data-color="fuchsia"] { 
+  background-color: var(--fuchsia);
+}
+[data-color="purple"] { 
+  background-color: var(--purple);
+}
+[data-color="silver"] { 
+  background-color: var(--silver);
+}
+[data-color="gray"] { 
+  background-color: var(--gray);
+}
+[data-color="black"] { 
+  background-color: var(--black);
+}
+.ItemsList {
+  padding: 1rem;
+  grid-area: items-list;
+  flex: 0 0 300px;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+}
+.ColorItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--gray);
+  background: #fff;
+  cursor: pointer;
+}
+.ColorItem--selected {
+  border-color: #2f8659;
+  background: #e6f4ea;
+}
+.ColorItem__Color {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.ColorItem__Size {
+  font-size: 10px;
+  color: var(--gray);
+  font-weight: bold;
+}
+.ColorItem__Info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+.ColorItem__Name {
+  font-size: 14px;
+}
+.ColorItem__Content {
+  display: flex;
+  gap: 8px;
+  justify-content: left;
+  align-items: center;
+}
+
+.Checkbox__Box {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--gray);
+}
+
+.Checkbox__Box--checked {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background: #2f8659;
+  border: 1px solid #2f8659;
+  border-radius: var(--border-radius);
+}
+
+.Checkbox__Checkmark {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 6px;
+  height: 10px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: translate(-50%, -55%) rotate(45deg);
+}
+
+
+
+/* Existing Styles */
+
+.List__item--navy {
+  background-color: var(--navy);
+}
+
+.List__item--blue {
+  background-color: var(--blue);
+}
+
+.List__item--aqua {
+  background-color: var(--aqua);
+}
+
+.List__item--teal {
+  background-color: var(--teal);
+}
+
+.List__item--olive {
+  background-color: var(--olive);
+}
+
+.List__item--green {
+  background-color: var(--green);
+}
+
+.List__item--lime {
+  background-color: var(--lime);
+}
+
+.List__item--yellow {
+  background-color: var(--yellow);
+}
+
+.List__item--orange {
+  background-color: var(--orange);
+}
+
+.List__item--red {
+  background-color: var(--red);
+}
+
+.List__item--maroon {
+  background-color: var(--maroon);
+}
+
+.List__item--fuchsia {
+  background-color: var(--fuchsia);
+}
+
+.List__item--purple {
+  background-color: var(--purple);
+}
+
+.List__item--black {
+  background-color: var(--black);
+}
+
+.List__item--gray {
+  background-color: var(--gray);
+}
+
+.List__item--silver {
+  background-color: var(--silver);
+}
+
+@media (min-width: 768px) {
+  .Container {
+    grid-template-columns: 300px 1fr;
+    grid-template-areas: 
+      "siderail main";
+  }
+}
