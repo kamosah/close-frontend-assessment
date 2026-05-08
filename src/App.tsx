@@ -205,14 +205,7 @@ const SideRailItem = memo(({ item, onRemove }: SideRailItemProps) => (
 
 const EmptySelection = () => (
   <div className="SideRail__Empty" role="status">
-    <div className="SideRail__Empty__Icon" aria-hidden="true">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2" />
-        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-        <line x1="12" y1="12" x2="12" y2="16" />
-        <line x1="10" y1="14" x2="14" y2="14" />
-      </svg>
-    </div>
+    <div className="SideRail__Empty__Icon" aria-hidden="true" />
     <p className="SideRail__Empty__Title">Nothing selected yet</p>
     <p className="SideRail__Empty__Subtitle">
       Tap any item on the right to add it here. Your selection is saved between sessions.
@@ -400,9 +393,23 @@ const ColorItem = memo(({ isFocused, isSelected, item, onToggle }: ColorItemProp
 
 // ─── ItemsList ───────────────────────────────────────────────────────────────
 
+const NoResults = ({ onClearSearch }: { onClearSearch: () => void }) => (
+  <div className="NoResults" role="status" aria-live="polite">
+    <div className="NoResults__Icon" aria-hidden="true" />
+    <p className="NoResults__Title">No matches</p>
+    <p className="NoResults__Subtitle">Try a different search or adjust the color filter.</p>
+    <button className="NoResults__ClearButton" onClick={onClearSearch}>
+      Clear search
+    </button>
+  </div>
+);
+
 const ItemsList = () => {
   const {
+    colorFilters,
     filteredItems,
+    onSearchQueryChange,
+    onToggleColorFilter,
     onToggleItemSelected,
     searchInputRef,
     selectedItemsKeys,
@@ -463,6 +470,20 @@ const ItemsList = () => {
         break;
     }
   };
+
+  const handleClearSearch = useCallback(() => {
+    onSearchQueryChange("");
+    colorFilters.forEach((c) => onToggleColorFilter(c));
+    searchInputRef.current?.focus();
+  }, [onSearchQueryChange, colorFilters, onToggleColorFilter, searchInputRef]);
+
+  if (filteredItems.length === 0) {
+    return (
+      <div className="ItemsList ItemsList--empty">
+        <NoResults onClearSearch={handleClearSearch} />
+      </div>
+    );
+  }
 
   return (
     <div

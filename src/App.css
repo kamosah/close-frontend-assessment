@@ -302,11 +302,27 @@ body {
   height: 48px;
   border-radius: 50%;
   background: var(--surface-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
   margin-bottom: var(--space-2);
+  /* CSS inbox tray shape */
+  position: relative;
+}
+
+.SideRail__Empty__Icon::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1.5px solid var(--text-secondary);
+  border-radius: 3px;
+}
+
+.SideRail__Empty__Icon::after {
+  content: "";
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  height: 40%;
+  border-top: 1.5px solid var(--text-secondary);
 }
 
 .SideRail__Empty__Title {
@@ -465,6 +481,87 @@ body {
   height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+/* ─── No results empty state ─────────────────────────────────────────────── */
+
+.ItemsList--empty {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.NoResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  max-width: 280px;
+}
+
+.NoResults__Icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--surface-muted);
+  margin-bottom: var(--space-2);
+  position: relative;
+}
+
+/* CSS magnifier icon */
+.NoResults__Icon::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--text-secondary);
+  border-radius: 50%;
+}
+
+.NoResults__Icon::after {
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 9px;
+  height: 2px;
+  background: var(--text-secondary);
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.NoResults__Title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.NoResults__Subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.NoResults__ClearButton {
+  margin-top: var(--space-1);
+  padding: 6px var(--space-4);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-default);
+  background: var(--surface-base);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.NoResults__ClearButton:hover {
+  border-color: var(--brand-green);
+  color: var(--brand-green);
 }
 
 /* ─── ItemsList grid ─────────────────────────────────────────────────────── */
