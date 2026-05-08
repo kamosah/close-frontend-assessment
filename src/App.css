@@ -123,7 +123,8 @@ body {
   border-bottom: 1px solid var(--border-default);
   display: flex;
   flex-direction: column;
-  max-height: 35dvh;
+  /* Collapses to just the header when empty; expands up to 40dvh with a selection */
+  max-height: 40dvh;
   overflow-y: auto;
 }
 
@@ -289,6 +290,13 @@ body {
 }
 
 /* ─── Empty selection state ─────────────────────────────────────────────── */
+
+/* On mobile the sticky header badge is enough — hide the illustration */
+@media (max-width: 767px) {
+  .SideRail__Empty {
+    display: none;
+  }
+}
 
 .SideRail__Empty {
   display: flex;
@@ -579,7 +587,7 @@ body {
   grid-template-columns: 1fr;
 }
 
-@media (min-width: 480px) {
+@media (min-width: 560px) {
   .ItemsList {
     grid-template-columns: repeat(2, 1fr);
   }
