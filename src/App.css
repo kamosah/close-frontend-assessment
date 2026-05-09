@@ -588,26 +588,7 @@ body {
   display: grid;
   gap: var(--space-3);
   align-content: start;
-  /* Mobile: 1 column */
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 560px) {
-  .ItemsList {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .ItemsList {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1400px) {
-  .ItemsList {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 /* ───────────────────────────── ColorItem card ───────────────────────────── */
