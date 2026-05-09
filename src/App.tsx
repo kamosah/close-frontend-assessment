@@ -10,14 +10,14 @@ import React, {
 } from "react";
 import "./App.css";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+// ─────────────────────────────────── Types ───────────────────────────────────
 
 interface Item {
   name: string;
   color: string;
 }
 
-// ─── Constants ───────────────────────────────────────────────────────────────
+// ───────────────────────────────── Constants ─────────────────────────────────
 
 const SIZES = ["tiny", "small", "medium", "large", "huge"];
 const COLORS = [
@@ -57,7 +57,7 @@ const ITEMS: Item[] = SIZES.flatMap((size) =>
   ),
 );
 
-// ─── Hooks ───────────────────────────────────────────────────────────────────
+// ─────────────────────────────────── Hooks ───────────────────────────────────
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debounced, setDebounced] = useState<T>(value);
@@ -100,7 +100,7 @@ function usePersistedSelection(): [
   return [selectedItemsKeys, setSelectedItemsKeys];
 }
 
-// ─── Context ─────────────────────────────────────────────────────────────────
+// ────────────────────────────────── Context ──────────────────────────────────
 
 interface ItemsContextValue {
   colorFilters: Set<string>;
@@ -196,7 +196,7 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
 
 const useItems = () => useContext(ItemsContext);
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
+// ─────────────────────────────────── Icons ───────────────────────────────────
 
 const CloseIcon = () => (
   <div className="CloseIcon" aria-hidden="true">
@@ -214,7 +214,7 @@ const CheckboxIcon = ({ isChecked }: { isChecked: boolean }) => (
   </div>
 );
 
-// ─── SideRail ────────────────────────────────────────────────────────────────
+// ───────────────────────────────── SideRail ──────────────────────────────────
 
 interface SideRailItemProps {
   item: Item;
@@ -322,7 +322,7 @@ const SideRail = () => {
   );
 };
 
-// ─── Toolbar ─────────────────────────────────────────────────────────────────
+// ────────────────────────────────── Toolbar ──────────────────────────────────
 
 interface ColorBadgeProps {
   color: string;
@@ -398,7 +398,7 @@ const Toolbar = () => {
   );
 };
 
-// ─── ColorItem ───────────────────────────────────────────────────────────────
+// ───────────────────────────────── ColorItem ─────────────────────────────────
 
 interface ColorItemProps {
   isFocused: boolean;
@@ -439,7 +439,7 @@ const ColorItem = memo(
   },
 );
 
-// ─── ItemsList ───────────────────────────────────────────────────────────────
+// ───────────────────────────────── ItemsList ─────────────────────────────────
 
 const NoResults = ({ onClearSearch }: { onClearSearch: () => void }) => (
   <div className="NoResults" role="status" aria-live="polite">
@@ -597,7 +597,7 @@ const ItemsList = () => {
   );
 };
 
-// ─── Layout ──────────────────────────────────────────────────────────────────
+// ────────────────────────────────── Layout ───────────────────────────────────
 
 const Main = () => (
   <main className="Main">

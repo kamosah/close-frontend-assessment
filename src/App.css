@@ -1,4 +1,4 @@
-/* ─── Reset ──────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────── Reset ────────────────────────────────── */
 
 *,
 *::before,
@@ -8,7 +8,7 @@
   padding: 0;
 }
 
-/* ─── Design tokens ──────────────────────────────────────────────────────── */
+/* ───────────────────────────── Design tokens ────────────────────────────── */
 
 :root {
   /* Palette — CLRS (https://clrs.cc/) */
@@ -66,7 +66,7 @@
   --side-rail-width: 280px;
 }
 
-/* ─── Color dot utility ──────────────────────────────────────────────────── */
+/* ─────────────────────────── Color dot utility ──────────────────────────── */
 /* Used on any element with data-color="<name>" */
 
 [data-color="navy"]    { background-color: var(--color-navy); }
@@ -86,7 +86,7 @@
 [data-color="gray"]    { background-color: var(--color-gray); }
 [data-color="black"]   { background-color: var(--color-black); }
 
-/* ─── Layout ─────────────────────────────────────────────────────────────── */
+/* ───────────────────────────────── Layout ───────────────────────────────── */
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -115,7 +115,7 @@ body {
   }
 }
 
-/* ─── SideRail ───────────────────────────────────────────────────────────── */
+/* ──────────────────────────────── SideRail ──────────────────────────────── */
 
 .SideRail {
   grid-area: siderail;
@@ -193,7 +193,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* ─── Clear all button ───────────────────────────────────────────────────── */
+/* ──────────────────────────── Clear all button ──────────────────────────── */
 
 .SideRail__ClearAll {
   font-size: 12px;
@@ -296,7 +296,7 @@ body {
   background: var(--border-default);
 }
 
-/* ─── Empty selection state ─────────────────────────────────────────────── */
+/* ───────────────────────── Empty selection state ────────────────────────── */
 
 
 .SideRail__Empty {
@@ -350,7 +350,7 @@ body {
   max-width: 200px;
 }
 
-/* ─── Close icon ─────────────────────────────────────────────────────────── */
+/* ─────────────────────────────── Close icon ─────────────────────────────── */
 
 .CloseIcon {
   position: relative;
@@ -375,7 +375,7 @@ body {
   transform: translateX(-50%) rotate(-45deg);
 }
 
-/* ─── Main ───────────────────────────────────────────────────────────────── */
+/* ────────────────────────────────── Main ────────────────────────────────── */
 
 .Main {
   grid-area: main;
@@ -395,7 +395,7 @@ body {
   }
 }
 
-/* ─── Toolbar ────────────────────────────────────────────────────────────── */
+/* ──────────────────────────────── Toolbar ───────────────────────────────── */
 
 .Toolbar {
   grid-area: toolbar;
@@ -459,7 +459,7 @@ body {
   gap: var(--space-1) 6px;
 }
 
-/* ─── Color badge (filter pill) ──────────────────────────────────────────── */
+/* ─────────────────────── Color badge (filter pill) ──────────────────────── */
 
 .ColorBadge {
   display: inline-flex;
@@ -495,7 +495,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ─── No results empty state ─────────────────────────────────────────────── */
+/* ───────────────────────── No results empty state ───────────────────────── */
 
 .ItemsList--empty {
   display: flex !important;
@@ -580,7 +580,7 @@ body {
   color: var(--brand-green);
 }
 
-/* ─── ItemsList grid ─────────────────────────────────────────────────────── */
+/* ───────────────────────────── ItemsList grid ───────────────────────────── */
 
 .ItemsList {
   grid-area: items-list;
@@ -610,7 +610,7 @@ body {
   }
 }
 
-/* ─── ColorItem card ─────────────────────────────────────────────────────── */
+/* ───────────────────────────── ColorItem card ───────────────────────────── */
 
 .ColorItem {
   display: flex;
@@ -677,7 +677,7 @@ body {
   white-space: nowrap;
 }
 
-/* ─── Checkbox ───────────────────────────────────────────────────────────── */
+/* ──────────────────────────────── Checkbox ──────────────────────────────── */
 
 .Checkbox__Box {
   flex-shrink: 0;

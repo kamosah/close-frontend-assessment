@@ -1,4 +1,4 @@
-// ─── JSFiddle setup ───────────────────────────────────────────────────────────
+// ────────────────────────────── JSFiddle setup ───────────────────────────────
 // HTML panel:
 //   <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
 //   <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
@@ -20,7 +20,7 @@ const {
   useState,
 } = React;
 
-// ─── Constants ───────────────────────────────────────────────────────────────
+// ───────────────────────────────── Constants ─────────────────────────────────
 
 const STORAGE_KEY = "pickline_selected_v1";
 
@@ -41,7 +41,7 @@ const items = sizes.flatMap((size) =>
   )
 );
 
-// ─── Hooks ───────────────────────────────────────────────────────────────────
+// ─────────────────────────────────── Hooks ───────────────────────────────────
 
 function useDebounce(value, delay) {
   const [debounced, setDebounced] = useState(value);
@@ -74,7 +74,7 @@ function usePersistedSelection() {
   return [selectedItemsKeys, setSelectedItemsKeys];
 }
 
-// ─── Context ─────────────────────────────────────────────────────────────────
+// ────────────────────────────────── Context ──────────────────────────────────
 
 const ItemsContext = createContext({});
 
@@ -154,7 +154,7 @@ const ItemsProvider = ({ children }) => {
 
 const useItems = () => useContext(ItemsContext);
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
+// ─────────────────────────────────── Icons ───────────────────────────────────
 
 const CloseIcon = () => (
   <div className="CloseIcon" aria-hidden="true">
@@ -172,7 +172,7 @@ const CheckboxIcon = ({ isChecked }) => (
   </div>
 );
 
-// ─── SideRail ────────────────────────────────────────────────────────────────
+// ───────────────────────────────── SideRail ──────────────────────────────────
 
 const SideRailItem = memo(({ item, onRemove }) => (
   <li className="SideRail__item" onClick={() => onRemove(item.name)}>
@@ -259,7 +259,7 @@ const SideRail = () => {
   );
 };
 
-// ─── Toolbar ─────────────────────────────────────────────────────────────────
+// ────────────────────────────────── Toolbar ──────────────────────────────────
 
 const ColorBadge = memo(({ color, isSelected, onClick }) => (
   <button
@@ -315,7 +315,7 @@ const Toolbar = () => {
   );
 };
 
-// ─── ColorItem ───────────────────────────────────────────────────────────────
+// ───────────────────────────────── ColorItem ─────────────────────────────────
 
 const ColorItem = memo(({ isFocused, isSelected, item, onToggle }) => {
   const [size, , fruit] = item.name.split(" ");
@@ -343,7 +343,7 @@ const ColorItem = memo(({ isFocused, isSelected, item, onToggle }) => {
   );
 });
 
-// ─── ItemsList ───────────────────────────────────────────────────────────────
+// ───────────────────────────────── ItemsList ─────────────────────────────────
 
 const NoResults = ({ onClearSearch }) => (
   <div className="NoResults" role="status" aria-live="polite">
@@ -489,7 +489,7 @@ const ItemsList = () => {
   );
 };
 
-// ─── Layout ──────────────────────────────────────────────────────────────────
+// ────────────────────────────────── Layout ───────────────────────────────────
 
 const Main = () => (
   <main className="Main">
